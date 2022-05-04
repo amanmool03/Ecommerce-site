@@ -11,6 +11,7 @@ import {
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { listMyOrders } from "../store/actions/orderActions";
+import { USER_UPDATE_PROFILE_RESET } from "../store/constants/userConstant";
 
 export const Profile = () => {
   const [name, setName] = useState("");
@@ -38,7 +39,8 @@ export const Profile = () => {
     if (!userInfo) {
       navigate("/login");
     } else {
-      if (!user.name) {
+      if (!user || !user.name || success) {
+        dispatch({ type: USER_UPDATE_PROFILE_RESET });
         dispatch(getUserDetails("profile"));
         dispatch(listMyOrders());
       } else {
@@ -46,7 +48,7 @@ export const Profile = () => {
         setEmail(user.email);
       }
     }
-  }, [navigate, userInfo, user, dispatch]);
+  }, [navigate, userInfo, user, dispatch, success]);
 
   const submitHandler = (e) => {
     e.preventDefault();
